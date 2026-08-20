@@ -464,7 +464,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
     );
   }
   return (
-    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[calc(105vh+40px)] w-full">
+    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[70vw] lg:h-[calc(105vh+40px)] w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -484,7 +484,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
                   <img
                     src={(movie.logo_url || movie.logo_url_external) as string}
                     alt={movie.title}
-                    className="h-[180px] w-[520px] 2xl:h-[220px] 2xl:w-[640px] min-[1920px]:h-[260px] min-[1920px]:w-[760px] max-w-full object-contain"
+                    className="h-[130px] w-[380px] lg:h-[180px] lg:w-[520px] 2xl:h-[220px] 2xl:w-[640px] min-[1920px]:h-[260px] min-[1920px]:w-[760px] max-w-full object-contain"
                     loading="lazy"
                     decoding="async"
                   />
@@ -505,8 +505,8 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
           ) : null}
         </div>
 
-        <div className="mt-10 md:mt-[384px] relative w-full">
-          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6 md:-translate-x-[50px]">
+        <div className="mt-10 md:mt-[27vw] lg:mt-[384px] relative w-full">
+          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6 lg:-translate-x-[50px]">
             {movie ? (
               <>
                 <button
@@ -780,7 +780,7 @@ function Top10Row({ title, movies, onSelect, isMobile, loading }: { title: strin
   };
 
   return (
-    <section className="relative z-10 mt-3 md:-mt-[104px] mb-6 group/top10">
+    <section className="relative z-10 mt-3 lg:-mt-[104px] mb-6 group/top10">
       {isMobile ? (
         <h2 className="mb-1 px-6 text-xl font-semibold">{title}</h2>
       ) : (
