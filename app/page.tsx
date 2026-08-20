@@ -235,7 +235,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
       }`}
       style={{ backgroundColor: headerDark ? "#000000" : "transparent", backgroundImage: "none" }}
     >
-      <div className="mx-auto flex max-w-7xl items-center gap-8 px-6 py-3 overflow-visible min-h-[64px]">
+      <div className="mx-auto flex max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] items-center gap-8 px-6 py-3 overflow-visible min-h-[64px]">
         <Link
           href="/"
           aria-label="Home"
