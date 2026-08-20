@@ -476,24 +476,24 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
       <div className="absolute inset-0 hero-gradient pointer-events-none" />
 
       <div className="relative z-10 flex h-full flex-col justify-center pt-16">
-        <div className="mx-auto w-full max-w-7xl px-6">
+        <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] px-6">
           {movie ? (
             <>
               {(movie.logo_url || movie.logo_url_external) ? (
-                <div className="max-w-2xl">
+                <div className="max-w-2xl 2xl:max-w-3xl">
                   <img
                     src={(movie.logo_url || movie.logo_url_external) as string}
                     alt={movie.title}
-                    className="h-[180px] w-[520px] max-w-full object-contain"
+                    className="h-[180px] w-[520px] 2xl:h-[220px] 2xl:w-[640px] min-[1920px]:h-[260px] min-[1920px]:w-[760px] max-w-full object-contain"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
               ) : (
-                <h1 className="max-w-2xl text-4xl font-extrabold md:text-6xl">{movie.title}</h1>
+                <h1 className="max-w-2xl 2xl:max-w-3xl text-4xl font-extrabold md:text-6xl 2xl:text-7xl min-[1920px]:text-8xl">{movie.title}</h1>
               )}
               {movie.description ? (
-                <p className="mt-4 max-w-xl text-sm text-zinc-200 md:text-base">{movie.description}</p>
+                <p className="mt-4 max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{movie.description}</p>
               ) : null}
             </>
           ) : loading ? (
@@ -506,7 +506,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
         </div>
 
         <div className="mt-10 md:mt-[84px] relative w-full">
-          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-3 px-6">
+          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6">
             {movie ? (
               <>
                 <button
@@ -514,9 +514,9 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
                   onClick={() => {
                     if (movie) onSelect(movie);
                   }}
-                  className="inline-flex h-[43px] min-w-[120px] items-center justify-center gap-2 rounded bg-white px-6 py-2 font-bold text-black hover:bg-white/90"
+                  className="inline-flex h-[43px] 2xl:h-[52px] min-[1920px]:h-[60px] min-w-[120px] 2xl:min-w-[145px] items-center justify-center gap-2 rounded bg-white px-6 2xl:px-8 py-2 font-bold text-black 2xl:text-lg min-[1920px]:text-xl hover:bg-white/90"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="block">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="block h-8 w-8 2xl:h-10 2xl:w-10 min-[1920px]:h-11 min-[1920px]:w-11">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                   Play
@@ -526,15 +526,15 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
                   onClick={() => {
                     if (movie) onSelect(movie);
                   }}
-                  className="inline-flex h-[43px] items-center gap-2 rounded bg-[#4D4949] px-4 py-2 font-semibold text-white hover:bg-[#524D4D]"
+                  className="inline-flex h-[43px] 2xl:h-[52px] min-[1920px]:h-[60px] items-center gap-2 rounded bg-[#4D4949] px-4 2xl:px-6 py-2 font-semibold text-white 2xl:text-lg min-[1920px]:text-xl hover:bg-[#524D4D]"
                 >
-                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
+                  <span className="inline-flex h-6 w-6 2xl:h-8 2xl:w-8 shrink-0 items-center justify-center text-white/90">
                       <svg
                         aria-hidden="true"
                         viewBox="0 0 24 24"
                         width="22"
                         height="22"
-                        className="block"
+                        className="block h-[22px] w-[22px] 2xl:h-7 2xl:w-7 min-[1920px]:h-8 min-[1920px]:w-8"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2.6"
@@ -559,7 +559,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
 
           {movie?.maturity ? (
             <div className="absolute right-0 top-1/2 z-20 -translate-y-1/2">
-              <div className="border-l-2 border-white/80 bg-zinc-900/35 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
+              <div className="border-l-2 border-white/80 bg-zinc-900/35 px-4 2xl:px-6 py-2 2xl:py-3 text-sm 2xl:text-base min-[1920px]:text-lg font-semibold text-white backdrop-blur">
                 {movie.maturity}
               </div>
             </div>
