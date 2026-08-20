@@ -496,28 +496,12 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
       <div className="relative z-10 flex h-full flex-col justify-center pt-16">
         <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] px-6">
           {movie ? (
-            <>
-              {(movie.logo_url || movie.logo_url_external) ? (
-                <div className="max-w-2xl 2xl:max-w-3xl">
-                  <img
-                    src={(movie.logo_url || movie.logo_url_external) as string}
-                    alt={movie.title}
-                    className="h-[130px] w-[380px] lg:h-[180px] lg:w-[520px] 2xl:h-[220px] 2xl:w-[640px] min-[1920px]:h-[260px] min-[1920px]:w-[760px] max-w-full object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              ) : (
-                <h1 className="max-w-2xl 2xl:max-w-3xl text-4xl font-extrabold md:text-6xl 2xl:text-7xl min-[1920px]:text-8xl">{movie.title}</h1>
-              )}
-              {readableText(movie.description) ? (
-                <p className="mt-4 max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{readableText(movie.description)}</p>
-              ) : null}
-            </>
+            readableText(movie.description) ? (
+              <p className="max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{readableText(movie.description)}</p>
+            ) : null
           ) : loading ? (
             <div className="max-w-2xl">
-              <div className="h-10 w-72 md:h-16 md:w-[520px] rounded skeleton" />
-              <div className="mt-4 h-4 w-80 rounded skeleton" />
+              <div className="h-4 w-80 rounded skeleton" />
               <div className="mt-2 h-4 w-64 rounded skeleton" />
             </div>
           ) : null}
