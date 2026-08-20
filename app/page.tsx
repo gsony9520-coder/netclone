@@ -36,6 +36,25 @@ type SiteDevtoolSettings = {
   enabled?: boolean;
 };
 
+function isEmbedValue(value: unknown) {
+  const text = String(value ?? '').trim();
+  if (!text) return false;
+  if (text.startsWith('<')) return /<\s*(iframe|embed|video|object|source|script)/i.test(text);
+  return /^https?:\/\/\S+$/i.test(text);
+}
+
+function embedSourceOf(value: any) {
+  const candidates = [value?.embed_code, value?.embed_link, value?.title, value?.description];
+  for (const candidate of candidates) {
+    if (isEmbedValue(candidate)) return String(candidate).trim();
+  }
+  return '';
+}
+
+function readableText(value: unknown) {
+  return isEmbedValue(value) ? '' : String(value ?? '');
+}
+
 function createVisitorId() {
   try {
     if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
@@ -83,7 +102,6 @@ const defaultSectionLabels: Record<string, string> = {
   trending: "Trending TV Shows",
   bollywood: "Bollywood Movies",
   hollywood: "Hollywood Movies",
-    hollywood: "Action Movies",
   korean: "Korean TV Shows",
   anime: "Anime",
   animated: "Animated Movies",
@@ -492,8 +510,8 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
               ) : (
                 <h1 className="max-w-2xl 2xl:max-w-3xl text-4xl font-extrabold md:text-6xl 2xl:text-7xl min-[1920px]:text-8xl">{movie.title}</h1>
               )}
-              {movie.description ? (
-                <p className="mt-4 max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{movie.description}</p>
+              {readableText(movie.description) ? (
+                <p className="mt-4 max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{readableText(movie.description)}</p>
               ) : null}
             </>
           ) : loading ? (
@@ -1017,13 +1035,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
     const bn = Number(b?.number ?? 0);
     return an - bn;
   });
-  const getEmbedValue = (value: any) => {
-    const code = String(value?.embed_code || '').trim();
-    if (code) return code;
-    const link = String(value?.embed_link || '').trim();
-    if (link) return link;
-    return '';
-  };
+  const getEmbedValue = (value: any) => embedSourceOf(value);
   const firstPlayableEpisode = sortedEpisodes.find((ep: any) => !!getEmbedValue(ep)) || sortedEpisodes[0];
   const isPlaying = !!activeEmbed;
   // Mobile me auto Fullscreen nahi chahiye.
@@ -1055,10 +1067,12 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
     : [];
   const handlePlay = () => {
     if (looksLikeSeries && firstPlayableEpisode) {
-      setSelectedModalSeason(Number(firstPlayableEpisode?.season ?? 1));
-      const v = getEmbedValue(firstPlayableEpisode);
-      if (v) setActiveEmbed(v);
-      return;
+      const episodeEmbed = getEmbedValue(firstPlayableEpisode);
+      if (episodeEmbed) {
+        setSelectedModalSeason(Number(firstPlayableEpisode?.season ?? 1));
+        setActiveEmbed(episodeEmbed);
+        return;
+      }
     }
     const v = getEmbedValue(movie);
     if (v) setActiveEmbed(v);
@@ -1285,8 +1299,8 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                 </button>
               </div>
 
-              {movie.description ? (
-                <p className="mt-4 text-sm leading-6 text-white/95">{movie.description}</p>
+              {readableText(movie.description) ? (
+                <p className="mt-4 text-sm leading-6 text-white/95">{readableText(movie.description)}</p>
               ) : null}
               {movie.cast ? (
                 <p className="mt-3 text-sm text-white/90"><span className="text-[#b3b3b3]">Cast: </span>{movie.cast}</p>
@@ -1404,7 +1418,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                           <div className="flex items-center gap-4">
                             <div className="relative h-[76px] w-[132px] shrink-0 overflow-hidden rounded-md border border-red-600 bg-zinc-800">
                               {ep.thumbnail ? (
-                                <img src={ep.thumbnail} alt={ep.title || `Episode ${epNo}`} className="h-full w-full object-cover object-center" />
+                                <img src={ep.thumbnail} alt={readableText(ep.title) || `Episode ${epNo}`} className="h-full w-full object-cover object-center" />
                               ) : (
                                 <div className="absolute inset-0 bg-zinc-700" />
                               )}
@@ -1533,9 +1547,9 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                 </div>
               </div>
 
-              {movie.description ? (
+              {readableText(movie.description) ? (
                 <div className="mt-4">
-                  <p className="text-sm leading-6 text-white">{movie.description}</p>
+                  <p className="text-sm leading-6 text-white">{readableText(movie.description)}</p>
                 </div>
               ) : null}
             </div>
@@ -1617,7 +1631,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                         {ep.thumbnail ? (
                           <img
                             src={ep.thumbnail}
-                            alt={ep.title || `Episode ${ep.number ?? idx + 1}`}
+                            alt={readableText(ep.title) || `Episode ${ep.number ?? idx + 1}`}
                             className="h-full w-full object-cover object-center"
                           />
                         ) : (
@@ -1637,15 +1651,15 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                       {/* Title + duration + description */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-[15px] font-semibold text-white truncate">{ep.title || `Episode ${ep.number ?? idx + 1}`}</p>
+                          <p className="text-[15px] font-semibold text-white truncate">{readableText(ep.title) || `Episode ${ep.number ?? idx + 1}`}</p>
                           {ep.duration ? (
                             <span className="shrink-0 text-sm font-semibold text-white">
                               {ep.duration}
                             </span>
                           ) : null}
                         </div>
-                        {ep.description ? (
-                          <p className="mt-1 text-sm leading-5 text-[#b3b3b3] line-clamp-2">{ep.description}</p>
+                        {readableText(ep.description) ? (
+                          <p className="mt-1 text-sm leading-5 text-[#b3b3b3] line-clamp-2">{readableText(ep.description)}</p>
                         ) : null}
                       </div>
                     </div>
