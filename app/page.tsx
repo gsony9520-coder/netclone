@@ -36,6 +36,25 @@ type SiteDevtoolSettings = {
   enabled?: boolean;
 };
 
+function isEmbedValue(value: unknown) {
+  const text = String(value ?? '').trim();
+  if (!text) return false;
+  if (text.startsWith('<')) return /<\s*(iframe|embed|video|object|source|script)/i.test(text);
+  return /^https?:\/\/\S+$/i.test(text);
+}
+
+function embedSourceOf(value: any) {
+  const candidates = [value?.embed_code, value?.embed_link, value?.title, value?.description];
+  for (const candidate of candidates) {
+    if (isEmbedValue(candidate)) return String(candidate).trim();
+  }
+  return '';
+}
+
+function readableText(value: unknown) {
+  return isEmbedValue(value) ? '' : String(value ?? '');
+}
+
 function createVisitorId() {
   try {
     if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
@@ -83,7 +102,6 @@ const defaultSectionLabels: Record<string, string> = {
   trending: "Trending TV Shows",
   bollywood: "Bollywood Movies",
   hollywood: "Hollywood Movies",
-    hollywood: "Action Movies",
   korean: "Korean TV Shows",
   anime: "Anime",
   animated: "Animated Movies",
@@ -235,11 +253,11 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
       }`}
       style={{ backgroundColor: headerDark ? "#000000" : "transparent", backgroundImage: "none" }}
     >
-      <div className="mx-auto flex max-w-7xl items-center gap-8 px-6 py-3 overflow-visible min-h-[64px]">
+      <div className="mx-auto flex max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] items-center gap-8 px-6 py-3 overflow-visible min-h-[64px]">
         <Link
           href="/"
           aria-label="Home"
-          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150"
+          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150 lg:-translate-x-[50px]"
           style={titleStyle}
           onMouseEnter={() => setTitleHovered(true)}
           onMouseLeave={() => setTitleHovered(false)}
@@ -249,7 +267,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
         {isMobile && navHomeText ? (
           <span className="md:hidden text-base font-semibold text-white">{navHomeText}</span>
         ) : null}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200">
+        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200 lg:-translate-x-[50px]">
           {navHomeText ? <a className="hover:text-white" href="#home">{navHomeText}</a> : null}
           {navTvText ? <a className="hover:text-white" href="#tv">{navTvText}</a> : null}
           {navMoviesText ? <a className="hover:text-white" href="#movies">{navMoviesText}</a> : null}
@@ -464,7 +482,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
     );
   }
   return (
-    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[calc(105vh+40px)] w-full">
+    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[70vw] lg:h-[calc(105vh+40px)] w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -476,24 +494,22 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
       <div className="absolute inset-0 hero-gradient pointer-events-none" />
 
       <div className="relative z-10 flex h-full flex-col justify-center pt-16">
-        <div className="mx-auto w-full max-w-7xl px-6">
+        <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] px-6">
           {movie ? (
             <>
               {(movie.logo_url || movie.logo_url_external) ? (
-                <div className="max-w-2xl">
+                <div className="max-w-2xl 2xl:max-w-3xl">
                   <img
                     src={(movie.logo_url || movie.logo_url_external) as string}
                     alt={movie.title}
-                    className="h-[180px] w-[520px] max-w-full object-contain"
+                    className="h-[130px] w-[380px] lg:h-[180px] lg:w-[520px] 2xl:h-[220px] 2xl:w-[640px] min-[1920px]:h-[260px] min-[1920px]:w-[760px] max-w-full object-contain"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
-              ) : (
-                <h1 className="max-w-2xl text-4xl font-extrabold md:text-6xl">{movie.title}</h1>
-              )}
-              {movie.description ? (
-                <p className="mt-4 max-w-xl text-sm text-zinc-200 md:text-base">{movie.description}</p>
+              ) : null}
+              {readableText(movie.description) ? (
+                <p className="mt-4 max-w-xl 2xl:max-w-2xl text-sm text-zinc-200 md:text-base 2xl:text-lg min-[1920px]:text-xl">{readableText(movie.description)}</p>
               ) : null}
             </>
           ) : loading ? (
@@ -505,8 +521,8 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
           ) : null}
         </div>
 
-        <div className="mt-10 md:mt-[84px] relative w-full">
-          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-3 px-6">
+        <div className="mt-10 md:mt-[27vw] lg:mt-[384px] relative w-full">
+          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6 lg:-translate-x-[50px]">
             {movie ? (
               <>
                 <button
@@ -514,9 +530,9 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
                   onClick={() => {
                     if (movie) onSelect(movie);
                   }}
-                  className="inline-flex h-[43px] min-w-[120px] items-center justify-center gap-2 rounded bg-white px-6 py-2 font-bold text-black hover:bg-white/90"
+                  className="inline-flex h-[43px] 2xl:h-[52px] min-[1920px]:h-[60px] min-w-[120px] 2xl:min-w-[145px] items-center justify-center gap-2 rounded bg-white px-6 2xl:px-8 py-2 font-bold text-black 2xl:text-lg min-[1920px]:text-xl hover:bg-white/90"
                 >
-                  <svg aria-hidden="true" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="block">
+                  <svg aria-hidden="true" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" className="block h-8 w-8 2xl:h-10 2xl:w-10 min-[1920px]:h-11 min-[1920px]:w-11">
                     <path d="M8 5v14l11-7z" />
                   </svg>
                   Play
@@ -526,15 +542,15 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
                   onClick={() => {
                     if (movie) onSelect(movie);
                   }}
-                  className="inline-flex h-[43px] items-center gap-2 rounded bg-[#4D4949] px-4 py-2 font-semibold text-white hover:bg-[#524D4D]"
+                  className="inline-flex h-[43px] 2xl:h-[52px] min-[1920px]:h-[60px] items-center gap-2 rounded bg-[#4D4949] px-4 2xl:px-6 py-2 font-semibold text-white 2xl:text-lg min-[1920px]:text-xl hover:bg-[#524D4D]"
                 >
-                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-white/90">
+                  <span className="inline-flex h-6 w-6 2xl:h-8 2xl:w-8 shrink-0 items-center justify-center text-white/90">
                       <svg
                         aria-hidden="true"
                         viewBox="0 0 24 24"
                         width="22"
                         height="22"
-                        className="block"
+                        className="block h-[22px] w-[22px] 2xl:h-7 2xl:w-7 min-[1920px]:h-8 min-[1920px]:w-8"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2.6"
@@ -559,7 +575,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
 
           {movie?.maturity ? (
             <div className="absolute right-0 top-1/2 z-20 -translate-y-1/2">
-              <div className="border-l-2 border-white/80 bg-zinc-900/35 px-4 py-2 text-sm font-semibold text-white backdrop-blur">
+              <div className="border-l-2 border-white/80 bg-zinc-900/35 px-4 2xl:px-6 py-2 2xl:py-3 text-sm 2xl:text-base min-[1920px]:text-lg font-semibold text-white backdrop-blur">
                 {movie.maturity}
               </div>
             </div>
@@ -576,7 +592,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
   const [rowCanRight, setRowCanRight] = useState(false);
   const [rowSteps, setRowSteps] = useState(1);
   const [rowStepIndex, setRowStepIndex] = useState(0);
-  const posterSizes = "(min-width:1024px) calc(((100vw-78px)/5.3)+5px), 112px";
+  const posterSizes = "(min-width:1024px) calc(((100vw-78px)/5.3)+5px), (min-width:768px) calc(((100vw-72px)/3.3)+5px), 112px";
 
   useEffect(() => {
     const el = ref.current;
@@ -650,7 +666,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
               <button
                 key={m.id}
                 onClick={() => onSelect(m)}
-                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px] md:h-auto md:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 md:w-[calc(((100%-24px)/3.3)+5px)] lg:w-[calc(((100%-30px)/5.3)+5px)]`}
               >
                 {(isMobile ? (m.mobile_poster_url || m.mobile_poster_url_external || m.poster_url || m.poster_url_external) : (m.poster_url || m.poster_url_external)) ? (
                   <Poster
@@ -666,7 +682,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
             ) : (
               <div
                 key={m.id || `skeleton-${title}-${idx}`}
-                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px] md:h-auto md:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 md:w-[calc(((100%-24px)/3.3)+5px)] lg:w-[calc(((100%-30px)/5.3)+5px)]`}
                 aria-hidden="true"
               >
                 <div className="absolute inset-0 skeleton" />
@@ -780,7 +796,7 @@ function Top10Row({ title, movies, onSelect, isMobile, loading }: { title: strin
   };
 
   return (
-    <section className="relative z-10 mt-3 md:-mt-[104px] mb-6 group/top10">
+    <section className="relative z-10 mt-3 lg:-mt-[104px] mb-6 group/top10">
       {isMobile ? (
         <h2 className="mb-1 px-6 text-xl font-semibold">{title}</h2>
       ) : (
@@ -1017,13 +1033,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
     const bn = Number(b?.number ?? 0);
     return an - bn;
   });
-  const getEmbedValue = (value: any) => {
-    const code = String(value?.embed_code || '').trim();
-    if (code) return code;
-    const link = String(value?.embed_link || '').trim();
-    if (link) return link;
-    return '';
-  };
+  const getEmbedValue = (value: any) => embedSourceOf(value);
   const firstPlayableEpisode = sortedEpisodes.find((ep: any) => !!getEmbedValue(ep)) || sortedEpisodes[0];
   const isPlaying = !!activeEmbed;
   // Mobile me auto Fullscreen nahi chahiye.
@@ -1055,10 +1065,12 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
     : [];
   const handlePlay = () => {
     if (looksLikeSeries && firstPlayableEpisode) {
-      setSelectedModalSeason(Number(firstPlayableEpisode?.season ?? 1));
-      const v = getEmbedValue(firstPlayableEpisode);
-      if (v) setActiveEmbed(v);
-      return;
+      const episodeEmbed = getEmbedValue(firstPlayableEpisode);
+      if (episodeEmbed) {
+        setSelectedModalSeason(Number(firstPlayableEpisode?.season ?? 1));
+        setActiveEmbed(episodeEmbed);
+        return;
+      }
     }
     const v = getEmbedValue(movie);
     if (v) setActiveEmbed(v);
@@ -1285,8 +1297,8 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                 </button>
               </div>
 
-              {movie.description ? (
-                <p className="mt-4 text-sm leading-6 text-white/95">{movie.description}</p>
+              {readableText(movie.description) ? (
+                <p className="mt-4 text-sm leading-6 text-white/95">{readableText(movie.description)}</p>
               ) : null}
               {movie.cast ? (
                 <p className="mt-3 text-sm text-white/90"><span className="text-[#b3b3b3]">Cast: </span>{movie.cast}</p>
@@ -1404,7 +1416,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                           <div className="flex items-center gap-4">
                             <div className="relative h-[76px] w-[132px] shrink-0 overflow-hidden rounded-md border border-red-600 bg-zinc-800">
                               {ep.thumbnail ? (
-                                <img src={ep.thumbnail} alt={ep.title || `Episode ${epNo}`} className="h-full w-full object-cover object-center" />
+                                <img src={ep.thumbnail} alt={readableText(ep.title) || `Episode ${epNo}`} className="h-full w-full object-cover object-center" />
                               ) : (
                                 <div className="absolute inset-0 bg-zinc-700" />
                               )}
@@ -1533,9 +1545,9 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                 </div>
               </div>
 
-              {movie.description ? (
+              {readableText(movie.description) ? (
                 <div className="mt-4">
-                  <p className="text-sm leading-6 text-white">{movie.description}</p>
+                  <p className="text-sm leading-6 text-white">{readableText(movie.description)}</p>
                 </div>
               ) : null}
             </div>
@@ -1617,7 +1629,7 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                         {ep.thumbnail ? (
                           <img
                             src={ep.thumbnail}
-                            alt={ep.title || `Episode ${ep.number ?? idx + 1}`}
+                            alt={readableText(ep.title) || `Episode ${ep.number ?? idx + 1}`}
                             className="h-full w-full object-cover object-center"
                           />
                         ) : (
@@ -1637,15 +1649,15 @@ function Modal({ movie, onClose, isMobile, allMovies, onSelectMovie, telegramUrl
                       {/* Title + duration + description */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-[15px] font-semibold text-white truncate">{ep.title || `Episode ${ep.number ?? idx + 1}`}</p>
+                          <p className="text-[15px] font-semibold text-white truncate">{readableText(ep.title) || `Episode ${ep.number ?? idx + 1}`}</p>
                           {ep.duration ? (
                             <span className="shrink-0 text-sm font-semibold text-white">
                               {ep.duration}
                             </span>
                           ) : null}
                         </div>
-                        {ep.description ? (
-                          <p className="mt-1 text-sm leading-5 text-[#b3b3b3] line-clamp-2">{ep.description}</p>
+                        {readableText(ep.description) ? (
+                          <p className="mt-1 text-sm leading-5 text-[#b3b3b3] line-clamp-2">{readableText(ep.description)}</p>
                         ) : null}
                       </div>
                     </div>
