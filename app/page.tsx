@@ -505,7 +505,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
           ) : null}
         </div>
 
-        <div className="mt-10 md:mt-[84px] relative w-full">
+        <div className="mt-10 md:mt-[134px] relative w-full">
           <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6">
             {movie ? (
               <>
