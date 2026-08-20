@@ -505,7 +505,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
           ) : null}
         </div>
 
-        <div className="mt-10 md:mt-[134px] relative w-full">
+        <div className="mt-10 md:mt-[234px] relative w-full">
           <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6">
             {movie ? (
               <>
@@ -576,7 +576,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
   const [rowCanRight, setRowCanRight] = useState(false);
   const [rowSteps, setRowSteps] = useState(1);
   const [rowStepIndex, setRowStepIndex] = useState(0);
-  const posterSizes = "(min-width:1024px) calc(((100vw-78px)/5.3)+5px), 112px";
+  const posterSizes = "(min-width:1024px) calc(((100vw-78px)/5.3)+5px), (min-width:768px) calc(((100vw-72px)/3.3)+5px), 112px";
 
   useEffect(() => {
     const el = ref.current;
@@ -650,7 +650,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
               <button
                 key={m.id}
                 onClick={() => onSelect(m)}
-                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px] lg:h-auto lg:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px] md:h-auto md:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 md:w-[calc(((100%-24px)/3.3)+5px)] lg:w-[calc(((100%-30px)/5.3)+5px)]`}
               >
                 {(isMobile ? (m.mobile_poster_url || m.mobile_poster_url_external || m.poster_url || m.poster_url_external) : (m.poster_url || m.poster_url_external)) ? (
                   <Poster
@@ -666,7 +666,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
             ) : (
               <div
                 key={m.id || `skeleton-${title}-${idx}`}
-                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px] lg:h-auto lg:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px] md:h-auto md:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 md:w-[calc(((100%-24px)/3.3)+5px)] lg:w-[calc(((100%-30px)/5.3)+5px)]`}
                 aria-hidden="true"
               >
                 <div className="absolute inset-0 skeleton" />
