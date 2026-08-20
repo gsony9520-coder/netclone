@@ -650,7 +650,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
               <button
                 key={m.id}
                 onClick={() => onSelect(m)}
-                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`group relative ${isMobile ? 'h-[153px]' : 'h-[143px] lg:h-auto lg:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
               >
                 {(isMobile ? (m.mobile_poster_url || m.mobile_poster_url_external || m.poster_url || m.poster_url_external) : (m.poster_url || m.poster_url_external)) ? (
                   <Poster
@@ -666,7 +666,7 @@ function Row({ title, movies, onSelect, isMobile, loading }: { title: string; mo
             ) : (
               <div
                 key={m.id || `skeleton-${title}-${idx}`}
-                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
+                className={`relative ${isMobile ? 'h-[153px]' : 'h-[143px] lg:h-auto lg:aspect-[262/143]'} w-28 shrink-0 overflow-hidden rounded-[3px] bg-zinc-800 lg:w-[calc(((100%-30px)/5.3)+5px)]`}
                 aria-hidden="true"
               >
                 <div className="absolute inset-0 skeleton" />
