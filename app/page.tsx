@@ -239,7 +239,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
         <Link
           href="/"
           aria-label="Home"
-          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150"
+          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150 lg:-translate-x-[50px]"
           style={titleStyle}
           onMouseEnter={() => setTitleHovered(true)}
           onMouseLeave={() => setTitleHovered(false)}
@@ -249,7 +249,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
         {isMobile && navHomeText ? (
           <span className="md:hidden text-base font-semibold text-white">{navHomeText}</span>
         ) : null}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200">
+        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200 lg:-translate-x-[50px]">
           {navHomeText ? <a className="hover:text-white" href="#home">{navHomeText}</a> : null}
           {navTvText ? <a className="hover:text-white" href="#tv">{navTvText}</a> : null}
           {navMoviesText ? <a className="hover:text-white" href="#movies">{navMoviesText}</a> : null}
