@@ -1502,10 +1502,20 @@ async function Dashboard({ initialSection, initialMode, initialId, initialQuery,
   }
 
 return (
-  <div className="flex min-h-screen">
-    <aside className="w-72 shrink-0 border-r border-zinc-800 bg-[#0b0b0b]">
-      <div className="px-5 py-4 text-lg font-extrabold tracking-wide text-emerald-500">ADMIN DASHBOARD</div>
-      <nav className="px-2 pb-4 text-sm">
+  <div className="min-h-screen lg:flex">
+    <input id="admin-nav" type="checkbox" className="peer sr-only" />
+    <div className="flex items-center justify-between gap-3 border-b border-zinc-800 bg-[#0b0b0b] px-4 py-3 lg:hidden">
+      <span className="text-base font-extrabold tracking-wide text-emerald-500">ADMIN DASHBOARD</span>
+      <label
+        htmlFor="admin-nav"
+        className="cursor-pointer rounded bg-zinc-800 px-3 py-1.5 text-sm font-semibold hover:bg-zinc-700"
+      >
+        Menu
+      </label>
+    </div>
+    <aside className="hidden w-full shrink-0 border-b border-zinc-800 bg-[#0b0b0b] peer-checked:block lg:block lg:w-72 lg:border-b-0 lg:border-r 2xl:w-80">
+      <div className="hidden px-5 py-4 text-lg font-extrabold tracking-wide text-emerald-500 lg:block">ADMIN DASHBOARD</div>
+      <nav className="px-2 pb-4 text-sm 2xl:text-base">
         <details open={panel === 'content'} className="rounded-md border-t border-emerald-600/60 pt-3">
           <summary className="cursor-pointer select-none rounded px-3 py-2 text-xs uppercase tracking-wider text-zinc-400 hover:bg-zinc-800/70">
             Upload
@@ -1594,10 +1604,10 @@ return (
         </div>
       </nav>
     </aside>
-    <main className="flex-1 overflow-y-auto p-6 pt-20">
+    <main className="min-w-0 flex-1 overflow-y-auto p-4 pt-6 lg:p-6 lg:pt-20">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl font-bold sm:text-2xl 2xl:text-3xl">
             {panel === 'content'
               ? contentActive.label
               : panel === 'analysis'
@@ -1612,8 +1622,8 @@ return (
           </h1>
         </div>
         {panel === 'content' ? (
-          <div className="flex items-center gap-2">
-            <form method="GET" action="/admin" className="relative">
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+            <form method="GET" action="/admin" className="relative w-full sm:w-auto">
               <input type="hidden" name="panel" value="content" />
               <input type="hidden" name="sec" value={contentActive.key} />
               <input type="hidden" name="mode" value="list" />
@@ -1628,7 +1638,7 @@ return (
                 name="q"
                 defaultValue={q}
                 placeholder={`Search in ${contentActive.label}`}
-                className="w-56 rounded bg-zinc-900 pl-8 pr-3 py-1.5 text-sm outline-none ring-1 ring-zinc-800 focus:ring-zinc-700"
+                className="w-full rounded bg-zinc-900 pl-8 pr-3 py-1.5 text-sm outline-none ring-1 ring-zinc-800 focus:ring-zinc-700 sm:w-56"
               />
             </form>
             <a
@@ -1672,7 +1682,7 @@ return (
 
       {panel === 'content' ? (
         mode === 'list' ? (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
             {items.map((it) => {
               const rawTags = (it as any)?.tags;
               let primaryTag = '';
@@ -1732,7 +1742,7 @@ return (
                 key={it.id}
                 className={`rounded-lg border p-3 flex h-full flex-col ${isMarked ? 'border-emerald-700 bg-zinc-900' : 'border-zinc-800 bg-zinc-900'}`}
               >
-                <div className="relative mb-2 h-40 w-full overflow-hidden rounded">
+                <div className="relative mb-2 aspect-video w-full overflow-hidden rounded">
                   {(it.poster_url || it.poster_url_external) ? (
                     <img src={it.poster_url || (it.poster_url_external as string)} alt={it.title} className="h-full w-full object-cover" />
                   ) : (
@@ -1894,8 +1904,8 @@ return (
               placeholder="Cast"
               className="rounded bg-zinc-900 p-3 outline-none ring-1 ring-zinc-800"
             />
-            <div className="flex gap-2">
-              <div className="relative w-44 shrink-0">
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="relative w-full shrink-0 sm:w-44">
                 <select
                   name="maturity"
                   defaultValue={editing?.maturity || ''}
@@ -2415,7 +2425,7 @@ return (
           </form>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
             <div className="text-sm text-zinc-400">Total Titles</div>
             <div className="mt-2 text-3xl font-bold">{stats?.total ?? 0}</div>
