@@ -257,7 +257,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
         <Link
           href="/"
           aria-label="Home"
-          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150 lg:-translate-x-[50px]"
+          className="text-red-600 text-2xl font-extrabold tracking-wider cursor-pointer transition-colors duration-150 min-[1400px]:-translate-x-[50px]"
           style={titleStyle}
           onMouseEnter={() => setTitleHovered(true)}
           onMouseLeave={() => setTitleHovered(false)}
@@ -267,7 +267,7 @@ function Header({ scrolled, movies, onSelect, isMobile, settings }: { scrolled: 
         {isMobile && navHomeText ? (
           <span className="md:hidden text-base font-semibold text-white">{navHomeText}</span>
         ) : null}
-        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200 lg:-translate-x-[50px]">
+        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-200 min-[1400px]:-translate-x-[50px]">
           {navHomeText ? <a className="hover:text-white" href="#home">{navHomeText}</a> : null}
           {navTvText ? <a className="hover:text-white" href="#tv">{navTvText}</a> : null}
           {navMoviesText ? <a className="hover:text-white" href="#movies">{navMoviesText}</a> : null}
@@ -482,7 +482,7 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
     );
   }
   return (
-    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[70vw] lg:h-[calc(105vh+40px)] w-full">
+    <section id="home" className="relative h-[calc(95vh+40px)] md:h-[56.25vw] lg:h-[min(calc(105vh+40px),56.25vw)] w-full">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -521,8 +521,8 @@ function Hero({ movie, onSelect, isMobile, loading }: { movie: Movie | null; onS
           ) : null}
         </div>
 
-        <div className="mt-10 md:mt-[27vw] lg:mt-[384px] relative w-full">
-          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6 lg:-translate-x-[50px]">
+        <div className="mt-10 md:mt-[20vw] lg:mt-[min(384px,24vw)] relative w-full">
+          <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1600px] min-[1920px]:max-w-[1800px] flex-wrap items-center gap-3 2xl:gap-4 px-6 min-[1400px]:-translate-x-[50px]">
             {movie ? (
               <>
                 <button
